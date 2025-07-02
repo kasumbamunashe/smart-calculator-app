@@ -3,23 +3,27 @@ let history = document.getElementById('history');
 let memory = 0;
 let lastCalculation = '';
 
+
 function appendValue(val) {
   input.value += val;
 }
 
+
 function appendOperation(op) {
   const lastChar = input.value.slice(-1);
-  if ('+-*/%'.includes(lastChar)) return; // prevent duplicate operators
+  if ('+-*/%.'.includes(lastChar)) return;
   input.value += op;
 }
+
 
 function clearInput() {
   input.value = '';
 }
 
+
 function calculate() {
   try {
-    const result = eval(input.value);
+    const result = math.evaluate(input.value);
     lastCalculation = `${input.value} = ${result}`;
     history.innerText = lastCalculation;
     input.value = result;
@@ -28,15 +32,27 @@ function calculate() {
   }
 }
 
+
 function square() {
   if (input.value) {
-    input.value = Math.pow(parseFloat(input.value), 2);
+    try {
+      const val = math.evaluate(input.value);
+      input.value = math.pow(val, 2);
+    } catch {
+      alert("Invalid input for squaring");
+    }
   }
 }
 
+
 function squareRoot() {
   if (input.value) {
-    input.value = Math.sqrt(parseFloat(input.value));
+    try {
+      const val = math.evaluate(input.value);
+      input.value = math.sqrt(val);
+    } catch {
+      alert("Invalid input for square root");
+    }
   }
 }
 
@@ -59,7 +75,7 @@ function memoryClear() {
 
 
 document.addEventListener('keydown', (e) => {
-  if (!isNaN(e.key) || "+-*/.".includes(e.key)) {
+  if (!isNaN(e.key) || "+-*/.%".includes(e.key)) {
     appendValue(e.key);
   } else if (e.key === "Enter") {
     calculate();
